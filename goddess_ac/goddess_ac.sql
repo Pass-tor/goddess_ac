@@ -1,0 +1,57 @@
+CREATE TABLE IF NOT EXISTS `goddess_ac_bans` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `player_name` VARCHAR(100) DEFAULT 'Unknown',
+  `license` VARCHAR(100) NOT NULL,
+  `license2` VARCHAR(100) DEFAULT NULL,
+  `discord` VARCHAR(100) DEFAULT NULL,
+  `fivem` VARCHAR(100) DEFAULT NULL,
+  `ip_hash` VARCHAR(128) DEFAULT NULL,
+  `reason` TEXT NOT NULL,
+  `detection` VARCHAR(100) NOT NULL,
+  `evidence` TEXT DEFAULT NULL,
+  `admin` VARCHAR(100) DEFAULT 'Goddess System',
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `expires_at` TIMESTAMP NULL DEFAULT NULL,
+  `permanent` TINYINT(1) DEFAULT 0,
+  `active` TINYINT(1) DEFAULT 1,
+  INDEX (`license`),
+  INDEX (`active`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `goddess_ac_detections` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `source` INT NOT NULL,
+  `identifier` VARCHAR(100) NOT NULL,
+  `detection` VARCHAR(100) NOT NULL,
+  `severity` VARCHAR(20) NOT NULL,
+  `score` INT NOT NULL,
+  `confidence` FLOAT NOT NULL,
+  `evidence` TEXT DEFAULT NULL,
+  `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `goddess_ac_resources` (
+  `resource_name` VARCHAR(100) PRIMARY KEY,
+  `protected` TINYINT(1) DEFAULT 0,
+  `integrity_status` VARCHAR(50) DEFAULT 'UNKNOWN',
+  `manifest_hash` VARCHAR(128) DEFAULT NULL,
+  `last_scan` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `goddess_ac_integrity` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `resource_name` VARCHAR(100) NOT NULL,
+  `file_path` VARCHAR(255) NOT NULL,
+  `file_hash` VARCHAR(128) NOT NULL,
+  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE KEY `res_file` (`resource_name`, `file_path`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `goddess_ac_audit` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `admin_identifier` VARCHAR(100) NOT NULL,
+  `action` VARCHAR(100) NOT NULL,
+  `target` VARCHAR(100) DEFAULT NULL,
+  `details` TEXT DEFAULT NULL,
+  `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
